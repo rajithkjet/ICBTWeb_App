@@ -47,5 +47,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["pdf_file"])) {
         <button type="submit" class="btn btn-primary">Upload</button>
     </form>
 </div>
+
+<?php
+$upload_dir = "uploads/";
+
+$files = array_diff(scandir($upload_dir), array('.', '..')); // get files except . and ..
+
+?>
+<div class="container mt-5">
+    <h2>Uploaded PDF Files</h2>
+    <?php if (empty($files)): ?>
+        <p>No files found in the uploads folder.</p>
+    <?php else: ?>
+        <ul class="list-group">
+            <?php foreach ($files as $file): ?>
+                <?php if (mime_content_type($upload_dir . $file) === 'application/pdf'): ?>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <?php echo htmlspecialchars($file); ?>
+                        <a href="preview_pdf.php?file=<?php echo urlencode($file); ?>" target="_blank" class="btn btn-sm btn-primary">Preview</a>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+</div>
+
 </body>
 </html>
